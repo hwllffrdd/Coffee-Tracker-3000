@@ -70,7 +70,11 @@ def calculate_price(coffees):
 def generate_sheet(employees):
     wb = Workbook()
     ws = wb.active
-    ws.title = datetime.now().strftime("%B %Y")
+    current_date = datetime.now()
+    first_of_current_month = current_date.replace(day=1)
+    last_of_previous_month = first_of_current_month - timedelta(days=1)
+
+    ws.title = last_of_previous_month.strftime("%B %Y")
 
     ws['A1'] = "Name"
     ws['B1'] = "To pay"
@@ -85,7 +89,7 @@ def generate_sheet(employees):
         ws.cell(row=idx, column=3, value="Yes" if data['paid_last_month'] else "No")
         ws.cell(row=idx, column=4, value=data['coffees'])
 
-    filename = f"Coffee_Sheet_{datetime.now().strftime('%B_%Y')}.xlsx"
+    filename = f"Coffee_Sheet_{last_of_previous_month.strftime('%B_%Y')}.xlsx"
     wb.save(filename)
     print(f"Sheet saved as {filename}")
 
